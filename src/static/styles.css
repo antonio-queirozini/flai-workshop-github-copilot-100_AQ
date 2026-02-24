@@ -137,16 +137,6 @@ section h3 {
   background-color: #f8fafc;
   color: #374151;
 }
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 16px;
-  background-color: #f8fafc;
-  color: #374151;
-}
-
 button {
   background-color: #6366f1;
   color: #fff;
