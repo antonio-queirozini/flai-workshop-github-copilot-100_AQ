@@ -1,3 +1,4 @@
+import uuid
 import pytest
 from fastapi.testclient import TestClient
 from src.app import app
@@ -10,9 +11,20 @@ def test_get_activities():
     assert isinstance(response.json(), dict)
 
 def test_signup_and_unregister():
-    # Signup
-    response = client.post("/activities/Drama%20Club/signup?email=test@example.com")
-    assert response.status_code in (200, 400)  # 400 if already signed up
-    # Unregister
-    response = client.post("/activities/Drama%20Club/unregister?email=test@example.com")
-    assert response.status_code in (200, 400)  # 400 if not registered
+    unique_email = f"test-{uuid.uuid4()}@example.com"
+
+    # Signup should succeed for a new unique email
+    response = client.post(f"/activities/Drama%20Club/signup?email={unique_email}")
+    assert response.status_code == 200
+
+    # Verify participant is present after signup
+    activities = client.get("/activities").json()
+    assert unique_email in activities["Drama Club"]["participants"]
+
+    # Unregister should succeed for a registered participant
+    response = client.post(f"/activities/Drama%20Club/unregister?email={unique_email}")
+    assert response.status_code == 200
+
+    # Verify participant is absent after unregister
+    activities = client.get("/activities").json()
+    assert unique_email not in activities["Drama Club"]["participants"]
