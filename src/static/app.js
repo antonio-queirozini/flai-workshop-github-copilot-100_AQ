@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear loading message
       activitiesList.innerHTML = "";
 
+      // Clear and reset select dropdown to avoid duplicate options on refresh
+      activitySelect.innerHTML = '<option value="">Select an activity</option>';
+
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
         const activityCard = document.createElement("div");
@@ -20,46 +23,69 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
-        // Create participants list HTML
-        let participantsHTML = "";
+        // Build card using DOM methods to prevent XSS from server-provided values
+        const h4 = document.createElement("h4");
+        h4.textContent = name;
+
+        const descP = document.createElement("p");
+        descP.textContent = details.description;
+
+        const scheduleP = document.createElement("p");
+        const scheduleBold = document.createElement("strong");
+        scheduleBold.textContent = "Schedule:";
+        scheduleP.appendChild(scheduleBold);
+        scheduleP.appendChild(document.createTextNode(" " + details.schedule));
+
+        const availabilityP = document.createElement("p");
+        const availabilityBold = document.createElement("strong");
+        availabilityBold.textContent = "Availability:";
+        availabilityP.appendChild(availabilityBold);
+        availabilityP.appendChild(document.createTextNode(" " + spotsLeft + " spots left"));
+
+        activityCard.appendChild(h4);
+        activityCard.appendChild(descP);
+        activityCard.appendChild(scheduleP);
+        activityCard.appendChild(availabilityP);
+
+        // Build participants section using DOM methods
+        const participantsSection = document.createElement("div");
         if (details.participants && details.participants.length > 0) {
-          participantsHTML = `
-            <div class="participants-section">
-              <strong>Participants:</strong>
-              <ul class="participants-list" style="list-style-type: none; padding-left: 0;">
-                ${details.participants.map(p => `
-                  <li style="display: flex; align-items: center; justify-content: space-between; padding: 4px 0;">
-                    <span>${p}</span>
-                    <button class="delete-icon" title="Remove participant" style="background: none; border: none; cursor: pointer; margin-left: 8px; padding: 0; display: flex; align-items: center;" data-activity="${name}" data-participant="${p}">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                        <rect x="3" y="6" width="18" height="14" rx="2" fill="#fee2e2" stroke="#dc2626"/>
-                        <line x1="8" y1="10" x2="8" y2="16" />
-                        <line x1="12" y1="10" x2="12" y2="16" />
-                        <line x1="16" y1="10" x2="16" y2="16" />
-                        <path d="M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" stroke="#dc2626"/>
-                      </svg>
-                    </button>
-                  </li>
-                `).join("")}
-              </ul>
-            </div>
-          `;
+          participantsSection.className = "participants-section";
+          const strong = document.createElement("strong");
+          strong.textContent = "Participants:";
+          participantsSection.appendChild(strong);
+
+          const ul = document.createElement("ul");
+          ul.className = "participants-list";
+
+          details.participants.forEach(p => {
+            const li = document.createElement("li");
+
+            const span = document.createElement("span");
+            span.textContent = p;
+            li.appendChild(span);
+
+            const button = document.createElement("button");
+            button.className = "delete-icon";
+            button.title = "Remove participant";
+            button.style.cssText = "background: none; border: none; cursor: pointer; margin-left: 8px; padding: 0; display: flex; align-items: center;";
+            button.setAttribute("data-activity", name);
+            button.setAttribute("data-participant", p);
+            // SVG is static/hardcoded — no user data injected here
+            button.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;"><rect x="3" y="6" width="18" height="14" rx="2" fill="#fee2e2" stroke="#dc2626"/><line x1="8" y1="10" x2="8" y2="16" /><line x1="12" y1="10" x2="12" y2="16" /><line x1="16" y1="10" x2="16" y2="16" /><path d="M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" stroke="#dc2626"/></svg>';
+            li.appendChild(button);
+            ul.appendChild(li);
+          });
+
+          participantsSection.appendChild(ul);
         } else {
-          participantsHTML = `
-            <div class="participants-section empty">
-              <em>No participants yet.</em>
-            </div>
-          `;
+          participantsSection.className = "participants-section empty";
+          const em = document.createElement("em");
+          em.textContent = "No participants yet.";
+          participantsSection.appendChild(em);
         }
 
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          ${participantsHTML}
-        `;
-
+        activityCard.appendChild(participantsSection);
         activitiesList.appendChild(activityCard);
 
         // Add option to select dropdown
