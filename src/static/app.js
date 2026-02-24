@@ -10,8 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch("/activities");
       const activities = await response.json();
 
-      // Clear loading message
+      // Clear loading message and previous dropdown options
       activitiesList.innerHTML = "";
+      activitySelect.innerHTML = "";
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
@@ -20,46 +21,109 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
-        // Create participants list HTML
-        let participantsHTML = "";
+        const h4 = document.createElement("h4");
+        h4.textContent = name;
+
+        const descP = document.createElement("p");
+        descP.textContent = details.description;
+
+        const scheduleP = document.createElement("p");
+        const scheduleStrong = document.createElement("strong");
+        scheduleStrong.textContent = "Schedule: ";
+        scheduleP.appendChild(scheduleStrong);
+        scheduleP.appendChild(document.createTextNode(details.schedule));
+
+        const availP = document.createElement("p");
+        const availStrong = document.createElement("strong");
+        availStrong.textContent = "Availability: ";
+        availP.appendChild(availStrong);
+        availP.appendChild(document.createTextNode(`${spotsLeft} spots left`));
+
+        activityCard.appendChild(h4);
+        activityCard.appendChild(descP);
+        activityCard.appendChild(scheduleP);
+        activityCard.appendChild(availP);
+
+        // Create participants section
+        const participantsSection = document.createElement("div");
+        participantsSection.className = "participants-section";
+
         if (details.participants && details.participants.length > 0) {
-          participantsHTML = `
-            <div class="participants-section">
-              <strong>Participants:</strong>
-              <ul class="participants-list" style="list-style-type: none; padding-left: 0;">
-                ${details.participants.map(p => `
-                  <li style="display: flex; align-items: center; justify-content: space-between; padding: 4px 0;">
-                    <span>${p}</span>
-                    <button class="delete-icon" title="Remove participant" style="background: none; border: none; cursor: pointer; margin-left: 8px; padding: 0; display: flex; align-items: center;" data-activity="${name}" data-participant="${p}">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                        <rect x="3" y="6" width="18" height="14" rx="2" fill="#fee2e2" stroke="#dc2626"/>
-                        <line x1="8" y1="10" x2="8" y2="16" />
-                        <line x1="12" y1="10" x2="12" y2="16" />
-                        <line x1="16" y1="10" x2="16" y2="16" />
-                        <path d="M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" stroke="#dc2626"/>
-                      </svg>
-                    </button>
-                  </li>
-                `).join("")}
-              </ul>
-            </div>
-          `;
+          const strong = document.createElement("strong");
+          strong.textContent = "Participants:";
+          participantsSection.appendChild(strong);
+
+          const ul = document.createElement("ul");
+          ul.className = "participants-list";
+
+          details.participants.forEach(p => {
+            const li = document.createElement("li");
+
+            const span = document.createElement("span");
+            span.textContent = p;
+
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, "svg");
+            svg.setAttribute("width", "22");
+            svg.setAttribute("height", "22");
+            svg.setAttribute("viewBox", "0 0 24 24");
+            svg.setAttribute("fill", "none");
+            svg.setAttribute("stroke", "#dc2626");
+            svg.setAttribute("stroke-width", "2");
+            svg.setAttribute("stroke-linecap", "round");
+            svg.setAttribute("stroke-linejoin", "round");
+            svg.style.display = "block";
+
+            const rect = document.createElementNS(svgNS, "rect");
+            rect.setAttribute("x", "3"); rect.setAttribute("y", "6");
+            rect.setAttribute("width", "18"); rect.setAttribute("height", "14");
+            rect.setAttribute("rx", "2"); rect.setAttribute("fill", "#fee2e2");
+            rect.setAttribute("stroke", "#dc2626");
+
+            const line1 = document.createElementNS(svgNS, "line");
+            line1.setAttribute("x1", "8"); line1.setAttribute("y1", "10");
+            line1.setAttribute("x2", "8"); line1.setAttribute("y2", "16");
+
+            const line2 = document.createElementNS(svgNS, "line");
+            line2.setAttribute("x1", "12"); line2.setAttribute("y1", "10");
+            line2.setAttribute("x2", "12"); line2.setAttribute("y2", "16");
+
+            const line3 = document.createElementNS(svgNS, "line");
+            line3.setAttribute("x1", "16"); line3.setAttribute("y1", "10");
+            line3.setAttribute("x2", "16"); line3.setAttribute("y2", "16");
+
+            const path = document.createElementNS(svgNS, "path");
+            path.setAttribute("d", "M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2");
+            path.setAttribute("stroke", "#dc2626");
+
+            svg.appendChild(rect);
+            svg.appendChild(line1);
+            svg.appendChild(line2);
+            svg.appendChild(line3);
+            svg.appendChild(path);
+
+            const btn = document.createElement("button");
+            btn.className = "delete-icon";
+            btn.title = "Remove participant";
+            btn.style.cssText = "background: none; border: none; cursor: pointer; margin-left: 8px; padding: 0; display: flex; align-items: center;";
+            btn.dataset.activity = name;
+            btn.dataset.participant = p;
+            btn.appendChild(svg);
+
+            li.appendChild(span);
+            li.appendChild(btn);
+            ul.appendChild(li);
+          });
+
+          participantsSection.appendChild(ul);
         } else {
-          participantsHTML = `
-            <div class="participants-section empty">
-              <em>No participants yet.</em>
-            </div>
-          `;
+          participantsSection.classList.add("empty");
+          const em = document.createElement("em");
+          em.textContent = "No participants yet.";
+          participantsSection.appendChild(em);
         }
 
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          ${participantsHTML}
-        `;
-
+        activityCard.appendChild(participantsSection);
         activitiesList.appendChild(activityCard);
 
         // Add option to select dropdown
