@@ -2,26 +2,27 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   line-height: 1.6;
-  color: #333;
+  color: #374151;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f5f5f5;
+  padding: 24px;
+  background-color: #f3f4f6;
 }
 
 header {
   text-align: center;
-  padding: 20px 0;
-  margin-bottom: 30px;
-  background-color: #1a237e;
-  color: white;
-  border-radius: 5px;
+  padding: 32px 0;
+  margin-bottom: 32px;
+  background: linear-gradient(90deg, #6366f1 0%, #3b82f6 100%);
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.08);
 }
 
 header h1 {
@@ -31,7 +32,7 @@ header h1 {
 main {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 32px;
   justify-content: center;
 }
 
@@ -42,122 +43,151 @@ main {
 }
 
 section {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
+  border: 1px solid #e5e7eb;
 }
 
 section h3 {
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-  color: #1a237e;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #6366f1;
+  color: #6366f1;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .activity-card {
-  margin-bottom: 15px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background-color: #f8fafc;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.06);
 }
 
 .activity-card h4 {
-  margin-bottom: 10px;
-  color: #0066cc;
+  margin-bottom: 12px;
+  color: #3b82f6;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .activity-card p {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  color: #374151;
 }
 
 .participants-section {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #e3eafc;
-  border-radius: 4px;
-  border: 1px solid #c5cae9;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #eef2ff;
+  border-radius: 8px;
+  border: 1px solid #6366f1;
 }
 .participants-section strong {
-  color: #1a237e;
-  font-size: 15px;
+  color: #6366f1;
+  font-size: 16px;
+  font-weight: 500;
 }
 .participants-list {
-  margin: 8px 0 0 18px;
+  margin: 10px 0 0 0;
   padding-left: 0;
-  list-style-type: disc;
+  list-style-type: none;
 }
 .participants-list li {
-  margin-bottom: 3px;
-  color: #3949ab;
+  margin-bottom: 6px;
+  color: #6366f1;
   font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
 }
 .participants-section.empty {
-  background-color: #f9f9f9;
-  color: #888;
-  border: 1px dashed #bbb;
+  background-color: #f3f4f6;
+  color: #a1a1aa;
+  border: 1px dashed #cbd5e1;
   font-style: italic;
+  border-radius: 8px;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #6366f1;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
   font-size: 16px;
+  background-color: #f8fafc;
+  color: #374151;
+}
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #f8fafc;
+  color: #374151;
 }
 
 button {
-  background-color: #1a237e;
-  color: white;
+  background-color: #6366f1;
+  color: #fff;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   font-size: 16px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+  font-weight: 600;
 }
 
 button:hover {
-  background-color: #3949ab;
+  background-color: #3b82f6;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.12);
 }
 
 .message {
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 4px;
+  margin-top: 24px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
 .success {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #a5d6a7;
+  background-color: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
 }
 
 .error {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
 }
 
 .info {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
+  background-color: #e0f2fe;
+  color: #2563eb;
+  border: 1px solid #bae6fd;
 }
 
 .hidden {
@@ -166,7 +196,10 @@ button:hover {
 
 footer {
   text-align: center;
-  margin-top: 30px;
-  padding: 20px;
-  color: #666;
+  margin-top: 40px;
+  padding: 24px;
+  color: #a1a1aa;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  }
 }
